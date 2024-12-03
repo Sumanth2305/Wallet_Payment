@@ -1,0 +1,152 @@
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+header {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* Form Styles */
+form {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+
+.profile-field {
+    font-size: 16px;
+}
+
+.edit-icon {
+    cursor: pointer;
+    color: #4CAF50;
+    margin-left: 10px;
+}
+
+.edit-icon:hover {
+    color: #45a049;
+}
+
+input[type="text"] {
+    padding: 5px;
+    font-size: 14px;
+    width: 200px;
+}
+
+/* Profile Picture Styles */
+.profile-pic {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 4px solid #4CAF50;
+    cursor: pointer;
+}
+
+.profile-pic:hover {
+    opacity: 0.8;
+}
+
+/* Profile Container */
+.container {
+    text-align: center;
+    max-width: 400px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Flash Messages */
+.flash {
+    font-weight: bold;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.flash.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.flash.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .profile-container {
+        display: block;
+        text-align: center;
+    }
+
+    .profile-left, .profile-right {
+        display: block;
+        margin: 0 auto;
+    }
+
+    .profile-card {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .profile-pic {
+        width: 100px;
+        height: 100px;
+    }
+
+    .container {
+        width: 100%;
+        padding: 15px;
+    }
+}

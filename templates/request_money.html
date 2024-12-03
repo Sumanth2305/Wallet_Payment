@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Money - WALLET Payment Network</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>WALLET Payment Network</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('main_menu') }}">Main Menu</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Request Money</h2>
+
+        <form action="{{ url_for('request_money') }}" method="POST">
+            <label for="email">Recipient's Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter recipient's email" required>
+
+            <label for="amount">Amount to Request:</label>
+            <input type="number" id="amount" name="amount" step="0.01" min="0" placeholder="Enter amount" required>
+
+            <button type="submit">Request Money</button>
+        </form>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </main>
+
+    <footer>
+        <p>&copy; 2023 WALLET Payment Network</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

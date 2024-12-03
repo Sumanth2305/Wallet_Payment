@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - WALLET Payment Network</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
+</head>
+<body>
+    <header>
+        <h1>WALLET Payment Network</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('main_menu') }}">Main Menu</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Your Profile</h2>
+        
+        <div class="profile-container">
+            <div class="profile-left">
+                <img src="{{ url_for('static', filename='default.jpg') }}" alt="Profile Picture" class="profile-img">
+            </div>
+
+            <div class="profile-right">
+                <div class="profile-card">
+                    <h3>Your Details</h3>
+
+                    <p><strong>Email:</strong> 
+                        <span id="email" class="profile-field">{{ user['email'] }}</span>
+                        <span class="edit-icon" onclick="editField('email')">&#9998;</span>
+                    </p>
+
+                    <p><strong>Phone Number:</strong>
+                        <span id="phone_number" class="profile-field">{{ user['phone_number'] }}</span>
+                        <span class="edit-icon" onclick="editField('phone_number')">&#9998;</span>
+                    </p>
+
+                    <p><strong>Bank Account:</strong>
+                        <span id="bank_account" class="profile-field">{{ user['bank_account'] }}</span>
+                        <span class="edit-icon" onclick="editField('bank_account')">&#9998;</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </main>
+
+    <footer>
+        <p>&copy; 2023 WALLET Payment Network</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        function editField(field) {
+            var currentValue = document.getElementById(field).innerText;
+            var inputHtml = `<input type="text" id="edit_${field}" value="${currentValue}" /> <button onclick="saveChanges('${field}')">Save</button>`;
+            document.getElementById(field).innerHTML = inputHtml;
+        }
+
+        function saveChanges(field) {
+            var newValue = document.getElementById('edit_' + field).value;
+            $.ajax({
+                url: "{{ url_for('update_profile') }}",  // Flask route for updating profile
+                method: "POST",
+                data: {
+                    field: field,
+                    value: newValue
+                },
+                success: function(response) {
+                    if (response.success) {
+                        document.getElementById(field).innerHTML = newValue + ' <span class="edit-icon" onclick="editField(\'' + field + '\')">&#9998;</span>';
+                        alert('Profile updated successfully!');
+                    } else {
+                        alert('Error updating profile.');
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

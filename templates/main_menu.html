@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Menu - WALLET Payment Network</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+    </header>
+    <main>
+        <h1>WALLET Payment Network</h1>
+        <div class="container">
+            <!-- Make the Profile Photo clickable -->
+            <a href="{{ url_for('account_info') }}">
+                <img src="{{ url_for('static', filename='default.jpg') }}" alt="User Photo" class="profile-pic">
+            </a>
+        
+            <!-- Logout Link -->
+            <ul>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                <li><a href="{{ url_for('send_money') }}">Send Money</a></li>
+                <li><a href="{{ url_for('request_money') }}">Request Money</a></li>
+                <li><a href="{{ url_for('statements') }}">Statements</a></li>
+            </ul>
+        </div>        
+    </main>
+
+    <footer>
+        <p>&copy; 2023 WALLET Payment Network</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
