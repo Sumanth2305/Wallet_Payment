@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Send Money - WALLET Payment Network</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -20,7 +22,8 @@
     <main>
         <h2>Send Money</h2>
 
-        <form action="{{ url_for('send_money') }}" method="POST">
+        <!-- Send Money Form -->
+        <form id="sendMoneyForm" action="{{ url_for('send_money') }}" method="POST">
             <label for="recipient">Recipient's Email:</label>
             <input type="email" id="recipient" name="recipient" required>
 
@@ -30,19 +33,67 @@
             <button type="submit">Send Money</button>
         </form>
 
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="flash">
-                    {{ messages[0] }}
+        <!-- Modal for Success/Error Messages -->
+        <div class="modal" tabindex="-1" id="messageModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitle">Message</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modalMessage"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
-            {% endif %}
-        {% endwith %}
+            </div>
+        </div>
     </main>
 
     <footer>
         <p>&copy; 2023 WALLET Payment Network</p>
     </footer>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <!-- Include Bootstrap and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Handle form submission via AJAX
+            $("#sendMoneyForm").submit(function(event) {
+                event.preventDefault(); // Prevent the form from reloading the page
+
+                $.ajax({
+                    url: "{{ url_for('send_money') }}",
+                    method: "POST",
+                    data: {
+                        recipient: $('#recipient').val(),
+                        amount: $('#amount').val()
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#modalTitle').text('Success');
+                            $('#modalMessage').text(response.success);
+                            $('#messageModal').modal('show');  // Show the modal with success message
+                        } else if (response.error) {
+                            $('#modalTitle').text('Error');
+                            $('#modalMessage').text(response.error);
+                            $('#messageModal').modal('show');  // Show the modal with error message
+                        }
+                    },
+                    error: function() {
+                        $('#modalTitle').text('Error');
+                        $('#modalMessage').text('An error occurred while processing your request.');
+                        $('#messageModal').modal('show');  // Show the modal with error message
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

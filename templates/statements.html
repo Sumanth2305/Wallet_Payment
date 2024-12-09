@@ -7,19 +7,49 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+
+
     <header>
-        <h1>WALLET Payment Network</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('main_menu') }}">Main Menu</a></li>
-                <li><a href="{{ url_for('logout') }}">Logout</a></li>
-            </ul>
-        </nav>
+        <h1>Transaction Statements</h1>
+        <section class="filter-section">
+            <h2>Filter Transactions</h2>
+            <form action="{{ url_for('statements') }}" method="GET" id="filter-form" class="filter-form">
+                <div class="filter-group">
+                    <label for="transaction_id">Transaction ID:</label>
+                    <input type="text" name="transaction_id" id="transaction_id" 
+                           value="{{ filters.transaction_id }}" placeholder="Enter Transaction ID">
+                </div>
+                <div class="filter-group">
+                    <label for="person">Person:</label>
+                    <input type="text" name="person" id="person" 
+                           value="{{ filters.person }}" placeholder="Enter Person's Email">
+                </div>
+                <div class="filter-group">
+                    <label for="transaction_type">Transaction Type:</label>
+                    <select name="transaction_type" id="transaction_type">
+                        <option value="">All</option>
+                        <option value="sent" {% if filters.transaction_type == 'sent' %}selected{% endif %}>Sent</option>
+                        <option value="received" {% if filters.transaction_type == 'received' %}selected{% endif %}>Received</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="amount">Amount:</label>
+                    <input type="number" name="amount" id="amount" 
+                           value="{{ filters.amount }}" placeholder="Enter Amount">
+                </div>
+                <div class="filter-group">
+                    <label for="date">Date:</label>
+                    <input type="date" name="date" id="date" value="{{ filters.date }}">
+                </div>
+                <div class="filter-actions">
+                    <button type="submit" class="filter-button">Apply Filters</button>
+                    <a href="{{ url_for('statements') }}" class="reset-button">Reset</a>
+                </div>
+            </form>
+        </section>
     </header>
-
+    
     <main>
-        <h2>Transaction Statements</h2>
-
         {% if transactions|length == 0 %}
             <p>No transactions to display.</p>
         {% else %}
@@ -27,8 +57,8 @@
                 <thead>
                     <tr>
                         <th>Transaction ID</th>
-                        <th>Sender</th>
-                        <th>Receiver</th>
+                        <th>Person</th>
+                        <th>Transaction Type</th>
                         <th>Amount</th>
                         <th>Date</th>
                     </tr>
@@ -36,17 +66,17 @@
                 <tbody>
                     {% for transaction in transactions %}
                     <tr>
-                        <td>{{ transaction.id }}</td>
-                        <td>{{ transaction.sender_email }}</td>
-                        <td>{{ transaction.receiver_email }}</td>
-                        <td>{{ "%.2f"|format(transaction.amount) }}</td>
-                        <td>{{ transaction.date.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                        <td>{{ transaction['transaction_id'] }}</td>
+                        <td>{{ transaction['person'] }}</td>
+                        <td>{{ transaction['transaction_type'] }}</td>
+                        <td>${{ "%.2f"|format(transaction['amount']) }}</td>
+                        <td>{{ transaction['transaction_date'] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         {% endif %}
-
+    
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash {{ messages[0][0] }}">
@@ -55,6 +85,7 @@
             {% endif %}
         {% endwith %}
     </main>
+    
 
     <footer>
         <p>&copy; 2023 WALLET Payment Network</p>

@@ -24,7 +24,57 @@
                 <li><a href="{{ url_for('request_money') }}">Request Money</a></li>
                 <li><a href="{{ url_for('statements') }}">Statements</a></li>
             </ul>
-        </div>        
+        </div>  
+        
+        <div id="pending-requests">
+            <h3>Pending Money Requests</h3>
+            <ul id="requests-list"></ul>
+        </div>
+        
+        <script>
+            // Fetch pending requests on page load
+            document.addEventListener("DOMContentLoaded", function () {
+                fetch('/get_money_requests')
+                    .then(response => response.json())
+                    .then(data => {
+                        const requestsList = document.getElementById("requests-list");
+                        requestsList.innerHTML = "";
+        
+                        data.forEach(request => {
+                            const listItem = document.createElement("li");
+                            listItem.innerHTML = `
+                                ${request.requester_email} requested $${request.amount}
+                                <button onclick="respondToRequest(${request.request_id}, 'accept')">Accept</button>
+                                <button onclick="respondToRequest(${request.request_id}, 'reject')">Reject</button>
+                            `;
+                            requestsList.appendChild(listItem);
+                        });
+                    });
+            });
+        
+            // Handle accept/reject actions
+            function respondToRequest(requestId, action) {
+                fetch('/update_money_request', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ request_id: requestId, action: action })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Request updated successfully!");
+                        location.reload(); // Reload to refresh the pending list
+                    } else {
+                        alert("Failed to update the request: " + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error updating request:", error);
+                    alert("An error occurred. Please try again.");
+                });
+            }
+        </script>
+        
     </main>
 
     <footer>

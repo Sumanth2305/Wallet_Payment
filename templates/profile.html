@@ -44,9 +44,48 @@
                         <span id="bank_account" class="profile-field">{{ user['bank_account'] }}</span>
                         <span class="edit-icon" onclick="editField('bank_account')">&#9998;</span>
                     </p>
+                    <p><strong>Bank Balance:</strong> <span id="bank_balance" class="profile-field">${{ "%.2f"|format(user['bank_balance']) }}</span>
+                    </p>
+
                 </div>
             </div>
         </div>
+
+        <div class="profile-card">
+    <p><strong>Money Sent (This Month):</strong> <span id="money-sent">Loading...</span></p>
+    <p><strong>Money Received (This Month):</strong> <span id="money-received">Loading...</span></p>
+    <p><strong>Favorite User (Email):</strong> <span id="favorite-user">Loading...</span></p>
+    <p><strong>Highest Transactions by Month:</strong></p>
+    <ul id="highest-transactions">
+        <li>Loading...</li>
+    </ul>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "{{ url_for('get_monthly_data') }}",
+            method: "GET",
+            success: function (response) {
+                if (response) {
+                    $('#money-sent').text(response.sent);
+                    $('#money-received').text(response.received);
+                    $('#favorite-user').text(response.favorite_user);
+
+                    const transactionsList = $('#highest-transactions');
+                    transactionsList.empty();
+                    for (const [month, amount] of Object.entries(response.highest_transactions)) {
+                        transactionsList.append(`<li>${month}: ${amount}</li>`);
+                    }
+                }
+            },
+            error: function () {
+                alert("Error loading monthly data.");
+            }
+        });
+    });
+</script>
+
 
         {% with messages = get_flashed_messages() %}
             {% if messages %}
